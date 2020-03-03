@@ -1,0 +1,298 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Notes Swagger API",
+    "description": "RestFull Api - (Node.js / Express / Swagger)",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "scheme": "bearer",
+      "in": "header"
+    }
+  },
+  "tags": [
+    {
+      "name": "notes",
+      "description": "API for notes in the system"
+    },
+    {
+      "name": "users",
+      "description": "API for users in the system"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create new users in system",
+        "description": "Create new users in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Users that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New User is created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "500":{
+            "description": "Error server"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "login users in system",
+        "description": "login users in system",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New User is logged"
+          }
+        }
+      }
+    },
+    "/notes": {
+      "post": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "Post new note in system",
+        "description": "Create new notes in system",
+        "parameters": [
+          {
+            "name": "note",
+            "in": "body",
+            "description": "Note that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New Note is created",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "Get all notes in system",
+        "responses": {
+          "200": {
+            "description": "List of Notes",
+            "schema": {
+              "$ref": "#/definitions/Notes"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/notes/{noteId}": {
+      "parameters": [
+        {
+          "name": "noteId",
+          "in": "path",
+          "required": true,
+          "description": "ID of note that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "Get note with given ID",
+        "responses": {
+          "200": {
+            "description": "note is found",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete note with given ID",
+        "tags": [
+          "notes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Note is deleted",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update note with give ID",
+        "tags": [
+          "notes"
+        ],
+        "parameters": [
+          {
+            "name": "notes",
+            "in": "body",
+            "description": "Note with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Note is updated",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Note": {
+      "required": [
+        "title",
+        "content"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "Notes": {
+      "type": "array",
+      "items":{
+        "$ref": "#/definitions/Note"
+      } 
+    },
+    "User": {
+      "required": [
+        "name",
+        "surname",
+        "email",
+        "password",
+        "password_confirm"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password_confirm": {
+          "type": "string",
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
