@@ -9,7 +9,7 @@
 - JWT
 - Swagger-ui
 
-gli argomenti sono suddivi in gruppi di argomenti nelle sottocartelle:
+gli argomenti sono suddivi in gruppi nelle sottocartelle:
 
 -   ex_00-start
 -   ex_01-cmd-line-args
