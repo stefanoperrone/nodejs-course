@@ -1,105 +1,30 @@
-const mongoose = require("mongoose");
+const LinesCommand = require("command-line-args");
+const methods = require("./crud-methods");
+const argsList = [
+  //multiple: true accetta array di args in input nella shell
+  { name: "insert", type: String, multiple: true },
+  { name: "update", type: String, multiple: true },
+  { name: "delete", type: String, multiple: true },
+  { name: "find", type: String, multiple: true },
+  { name: "exit", type: Boolean }
+];
 
-mongoose.Promise = global.Promise;
-// definizione connessione al db
-mongoose.connect("mongodb://localhost:27017/biblioteca", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const options = LinesCommand(argsList);
 
-// definizione Schema
-const bookSchema = mongoose.Schema({
-  title: String,
-  author: String,
-  price: Number,
-  available: Boolean
-});
+console.log("Connection DB established");
 
-// definizione del model (con la prima lettera maiuscola)
-const Book = mongoose.model("Book", bookSchema);
-
-// creazione di un instanza
-const addBook = new Book({
-  title: "50 Volte il primo bacio",
-  author: "Massimo Cataldo",
-  price: 23,
-  available: true
-});
-
-// creazione di un instanza
-const addBook2 = new Book({
-  title: "50 Sfumature di Grigio",
-  author: "Massimo Cataldo",
-  price: 13,
-  available: true
-});
-
-// insert nel db
-addBook.save((err, doc) => {
-  if (err) {
-    return console.log("Error: ", err);
-  }
-  console.log("Added new book", doc);
-});
-
-// insert nel db
-addBook2.save((err, doc) => {
-  if (err) {
-    return console.log("Error: ", err);
-  }
-  console.log("Added new book", doc);
-});
-
-// find nel db
-Book.find({ author: "Massimo Cataldo" }, (err, doc) => {
-  if (err) {
-    return console.log("Error", err);
-  }
-  console.log("Find all by author: ", doc);
-});
-
-// findOne nel db
-Book.findOne({ author: "Massimo Cataldo" }, (err, doc) => {
-  if (err) {
-    return console.log("Error", err);
-  }
-  console.log("Find one by author: ", doc);
-});
-
-// findById nel db
-Book.findById("5e4ff245b8bda30b38b49805", (err, doc) => {
-  if (err) {
-    return console.log("Error", err);
-  }
-  console.log("Find by id: ", doc);
-});
-
-Book.findOneAndRemove({ author: "Massimo Cataldo" }, (err, doc) => {
-  if (err) {
-    return console.log("Error", err);
-  }
-  console.log("Remove one by author: ", doc);
-});
-
-Book.findOneAndUpdate(
-  { author: "Massimo Cataldo" },
-  { $set: { author: "Paolo Rossi" } },
-  (err, doc) => {
-    if (err) {
-      return console.log("Error", err);
-    }
-    console.log("Find one and updated by author: ", doc);
-  }
-);
-
-Book.findById("5e4ff2da63fdd10b77380dd4", (err, book) => {
-  if (err) {
-    return console.log("Error", err);
-  }
-
-  book.set({ price: 40 });
-  book.save((err, doc) => {
-    if (err) return console.log("Error:", err);
-    console.log(doc);
-  });
-});
+if (options.insert) {
+  //insert
+  methods.insertDocument(options.insert);
+} else if (options.find) {
+  //find
+  methods.findDocument(options.find);
+} else if (options.update) {
+  // update
+  methods.updateDocument(options.update);
+} else if (options.delete) {
+  // delete
+  methods.deleteDocument(options.delete);
+} else if (options.exit) {
+  console.log("Terminate");
+}
