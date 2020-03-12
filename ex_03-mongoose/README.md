@@ -6,6 +6,12 @@
     
     in questo primo esempio vedremo l'utilizzo del modulo:
     
-        npm i command-line-args --save
+        npm i mongooose --save
      
-    che consente l'inserimento di argomenti da riga di comando nel terminale
+    che consente di effettuare le operazioni CRUD sul db NO-SQL mongodb
+
+
+### *Guida utilizzo*: 
+   
+        node server.js
+

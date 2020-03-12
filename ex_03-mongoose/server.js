@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;
+// definizione connessione al db
 mongoose.connect("mongodb://localhost:27017/biblioteca", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
+// definizione Schema
 const bookSchema = mongoose.Schema({
   title: String,
   author: String,
@@ -13,9 +15,10 @@ const bookSchema = mongoose.Schema({
   available: Boolean
 });
 
-// variabile con la prima lettera maiuscola
+// definizione del model (con la prima lettera maiuscola)
 const Book = mongoose.model("Book", bookSchema);
 
+// creazione di un instanza
 const addBook = new Book({
   title: "50 Volte il primo bacio",
   author: "Massimo Cataldo",
@@ -23,6 +26,7 @@ const addBook = new Book({
   available: true
 });
 
+// creazione di un instanza
 const addBook2 = new Book({
   title: "50 Sfumature di Grigio",
   author: "Massimo Cataldo",
@@ -30,6 +34,7 @@ const addBook2 = new Book({
   available: true
 });
 
+// insert nel db
 addBook.save((err, doc) => {
   if (err) {
     return console.log("Error: ", err);
@@ -37,6 +42,7 @@ addBook.save((err, doc) => {
   console.log("Added new book", doc);
 });
 
+// insert nel db
 addBook2.save((err, doc) => {
   if (err) {
     return console.log("Error: ", err);
@@ -44,6 +50,7 @@ addBook2.save((err, doc) => {
   console.log("Added new book", doc);
 });
 
+// find nel db
 Book.find({ author: "Massimo Cataldo" }, (err, doc) => {
   if (err) {
     return console.log("Error", err);
@@ -51,6 +58,7 @@ Book.find({ author: "Massimo Cataldo" }, (err, doc) => {
   console.log("Find all by author: ", doc);
 });
 
+// findOne nel db
 Book.findOne({ author: "Massimo Cataldo" }, (err, doc) => {
   if (err) {
     return console.log("Error", err);
@@ -58,6 +66,7 @@ Book.findOne({ author: "Massimo Cataldo" }, (err, doc) => {
   console.log("Find one by author: ", doc);
 });
 
+// findById nel db
 Book.findById("5e4ff245b8bda30b38b49805", (err, doc) => {
   if (err) {
     return console.log("Error", err);
