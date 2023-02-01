@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "command-line-args": "^5.1.1",
-    "mongoose": "^5.9.1"
+    "mongoose": "^5.13.15"
   }
 }
